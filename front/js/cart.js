@@ -287,7 +287,7 @@ function getStorageData() {  // debugging function
 }
 
 /**
- * anonymous self-executing function initiates main 
+ * anonymous immediately executing function initiates main 
  * thread by calling
  * getProductData()
  * displayInputForm()
@@ -307,9 +307,9 @@ function getStorageData() {  // debugging function
     } 
     const submitErrorRegEx = {
         firstName:'^[0-9a-zA-Z]+$',
-        lastName:'^[0-9a-zA-Z-]+$',
-        address: '^(?:[0-9 ]+[A-Z][a-z.-]+[ ]?)+$',
-        city: '^(?:[A-Z][a-z,.-]+[ ]?)+[A-Za-z,.-]*$',
+        lastName:'^[0-9a-zA-Z]+[-]*[0-9a-zA-Z]+$',
+        address: '^(?:[0-9 ]+[A-Z][a-z.-]+[ ]?)+[A-Za-z.0-9 ]*$',
+        city: '^(?:[A-Z][a-z,.-]+[ ]?)+[A-Za-z.0-9 ]*$',
         email: '^[A-Za-z0-9_]+@([A-Za-z])+[.]{1}([a-z]){2,3}$'
     }
 
@@ -350,14 +350,14 @@ function getStorageData() {  // debugging function
         const errorMessages = submitErrorMsgs;
         const errorRegEx = submitErrorRegEx;
 
-        Object.keys(errorMessages).forEach((inputName) => {  // outer loop 
+        Object.keys(errorMessages).forEach((inputName) => {  // outer loop iterates through child elements of div.cart__order__form__question
             let contacts = {};  // new undefined object will have one property when initialised for each input node
             stringID = "ErrorMsg";
             let idAttr = `${inputName}${stringID}`;
             let errMsgParagraph = document.getElementById(idAttr);
             errMsgStyle = document.createAttribute('style');
             errMsgParagraph.setAttributeNode(errMsgStyle);
-            errMsgParagraph.style = 'visibility:hidden;';
+            errMsgParagraph.style = 'visibility:hidden;';    // inline css
             errMsgParagraph.innerText = errorMessages[inputName];
             let kanapFormInput = document.getElementById(inputName);
     
@@ -368,10 +368,10 @@ function getStorageData() {  // debugging function
                 let inputStr = $event.target.value;
                 if (inputStr.match(errorRegEx[inputName]) ) {   // initialise contact property 
                     errMsgParagraph.style = 'visibility:hidden;';
-                    contacts[inputName] = inputStr;             // assign value input by user if it matches regex
+                    contacts[inputName] = inputStr;             // assign value input by user if it matches regex and hide error 
                 } else {
                     errMsgParagraph.style = 'visibility:visible;';
-                    contacts[inputName] = "";                   // else assign empty string
+                    contacts[inputName] = "";                   // else assign empty string and show error message
                 }
                 Object.keys(contactObject).forEach((inputName) => {  // inner loop iterates through properties of contactObject
                     if ((contacts[inputName] !== "" ) && (typeof(contacts[inputName]) === 'string')){  // contacts contains input field data
